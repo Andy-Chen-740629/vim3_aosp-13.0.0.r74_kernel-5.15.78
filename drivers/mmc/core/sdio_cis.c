@@ -340,7 +340,7 @@ static int sdio_read_cis(struct mmc_card *card, struct sdio_func *func)
 				 * vendors, so don't warn about them
 				 */
 				if (tpl_code >= 0x80 && tpl_code <= 0x8f)
-					pr_debug_ratelimited(FMT("vendor"),
+					pr_warn_ratelimited(FMT("vendor"),
 						mmc_hostname(card->host),
 						tpl_code, tpl_link, this->data,
 						tpl_link);

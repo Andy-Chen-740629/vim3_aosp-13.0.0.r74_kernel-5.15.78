@@ -102,6 +102,7 @@ struct meson_bank {
 	unsigned int last;
 	int irq_first;
 	int irq_last;
+	int irq;
 	struct meson_reg_desc regs[NUM_REG];
 };
 
@@ -132,6 +133,7 @@ struct meson_pinctrl {
 	struct regmap *reg_ds;
 	struct gpio_chip chip;
 	struct device_node *of_node;
+	struct device_node *of_irq;
 };
 
 #define FUNCTION(fn)							\

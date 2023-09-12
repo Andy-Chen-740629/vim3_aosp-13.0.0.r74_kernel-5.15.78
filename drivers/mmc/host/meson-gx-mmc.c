@@ -131,6 +131,17 @@
 
 #define MUX_CLK_NUM_PARENTS 2
 
+//-----------------------------------------------
+struct mmc_host *sd_mmc1_host = NULL;
+//-----------------------------------------------
+void scan_sd_slot_bus(void)
+{
+	sd_mmc1_host->rescan_entered = 0;
+	mmc_detect_change(sd_mmc1_host, 0);
+}
+EXPORT_SYMBOL(scan_sd_slot_bus);
+//-----------------------------------------------
+
 struct meson_mmc_data {
 	unsigned int tx_delay_mask;
 	unsigned int rx_delay_mask;
@@ -1291,6 +1302,21 @@ static int meson_mmc_probe(struct platform_device *pdev)
 	}
 
 	mmc->ops = &meson_mmc_ops;
+
+//-----------------------------------------------
+	if (memcmp(mmc_hostname(mmc), "mmc2", 4) == 0)
+	{
+		sd_mmc1_host = mmc;
+		mmc->rescan_entered = 1;
+		dev_err(host->dev, "Don't scan bus on first time\n");
+		dev_err(host->dev, "caps = %X\n", host->mmc->caps);
+		dev_err(host->dev, "irq  = %d\n", host->irq);
+	} else {
+		dev_err(host->dev, "caps = %X\n", host->mmc->caps);
+		dev_err(host->dev, "irq  = %d\n", host->irq);
+	}
+//-----------------------------------------------
+
 	mmc_add_host(mmc);
 
 	return 0;

@@ -18,6 +18,12 @@
 		rtc1 = &vrtc;
 	};
 
+	aliases {
+		mmc2 = &sd_emmc_b; /* SD card */
+		mmc0 = &sd_emmc_c; /* eMMC    */
+		mmc1 = &sd_emmc_a; /* SDIO    */
+	};
+
 	chosen {
 		stdout-path = "serial0:115200n8";
 	};
@@ -400,15 +406,15 @@
 	/* WiFi firmware requires power to be kept while in suspend */
 	keep-power-in-suspend;
 
-	mmc-pwrseq = <&sdio_pwrseq>;
+//	mmc-pwrseq = <&sdio_pwrseq>;
 
 	vmmc-supply = <&vsys_3v3>;
 	vqmmc-supply = <&vddao_1v8>;
 
-	brcmf: wifi@1 {
-		reg = <1>;
-		compatible = "brcm,bcm4329-fmac";
-	};
+//	brcmf: wifi@1 {
+//		reg = <1>;
+//		compatible = "brcm,bcm4329-fmac";
+//	};
 };
 
 /* SD card */
@@ -420,12 +426,20 @@
 
 	bus-width = <4>;
 	cap-sd-highspeed;
-	max-frequency = <50000000>;
+	sd-uhs-sdr12;
+	sd-uhs-sdr25;
+	sd-uhs-sdr50;
+	sd-uhs-sdr104;
+	max-frequency = <200000000>;
+//	max-frequency = <50000000>;
 	disable-wp;
 
-	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
+	keep-power-in-suspend;
+
+//	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
 	vmmc-supply = <&vsys_3v3>;
-	vqmmc-supply = <&vsys_3v3>;
+	vqmmc-supply = <&vddao_1v8>;
+//	vqmmc-supply = <&vsys_3v3>;
 };
 
 /* eMMC */
@@ -501,13 +515,13 @@
 	pinctrl-names = "default";
 	uart-has-rtscts;
 
-	bluetooth {
-		compatible = "brcm,bcm43438-bt";
-		shutdown-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-		max-speed = <2000000>;
-		clocks = <&wifi32k>;
-		clock-names = "lpo";
-	};
+//	bluetooth {
+//		compatible = "brcm,bcm43438-bt";
+//		shutdown-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
+//		max-speed = <2000000>;
+//		clocks = <&wifi32k>;
+//		clock-names = "lpo";
+//	};
 };
 
 &uart_AO {
